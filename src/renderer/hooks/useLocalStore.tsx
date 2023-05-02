@@ -1,26 +1,11 @@
-import React from 'react'
-import { Playlist } from 'renderer/types/Playlist'
+import React, { useContext } from 'react'
+import LocalStore from './LocalStore'
 import { Song } from 'renderer/types/Song'
+import { Playlist } from 'renderer/types/Playlist'
 
-const useLocalStore = () => {
-  const store = window.electron.store
-  function getSongs() : Song[] {
-      return store.get('songs')  || []
-  }
-  function setSongs(songs:Song[]){
-      store.set('songs',songs)
-  }
-  function getPlaylists():Playlist[]{
-
-
-      return store.get('playlists')  || []
-
-  }
-  function setPlaylists(pl:Playlist[]){
-
-      store.set('playlists',pl)
-  }
-  return {getSongs,getPlaylists,setSongs,setPlaylists}
+const useLocalStore = () : [Song[],Playlist[],(s:Song[])=>void,(p:Playlist[])=>void] => {
+  const {songs,setSongs,playlists,setPlaylists} = useContext(LocalStore)
+  return [songs,playlists, setSongs,setPlaylists]
 }
 
 export default useLocalStore

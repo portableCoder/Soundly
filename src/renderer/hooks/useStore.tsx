@@ -9,7 +9,8 @@ interface PlayerState {
   duration:number,
   current:number,
   time:number,
-  hidden:boolean
+  hidden:boolean,
+  minimized:boolean
 
   }
 
@@ -23,14 +24,35 @@ type StoreSchema = {
   nextSong:()=>void,
   setPage:(pg:number)=>void,
   setSong:(song:number)=>void,
-  startPlaying:(pl:Playlist)=>void
+  startPlaying:(pl:Playlist)=>void,
+  setMinimized:(min:boolean)=>void
 }
 export type {
 
 }
 const useAppStore = create<StoreSchema>()((set) => ({
+  setMinimized(min) {
+      set((prev)=>({...prev,playerState:{
+        ...prev.playerState,
+        minimized:min
+      }}))
+  },
   startPlaying(pl) {
-      set((prev)=>({
+  set((prev)=>({
+        songIdx:0,
+        playerState:{
+          ...prev.playerState,
+          stopped:true,
+          playing:false,
+           current:0,
+           loop:false,
+           time:0,
+           duration:0,
+           minimized:false
+        }
+      }))
+    setTimeout(()=>{
+set((prev)=>({
         playlist:pl,
         songIdx:0,
         playerState:{
@@ -44,6 +66,8 @@ const useAppStore = create<StoreSchema>()((set) => ({
 
         }
       }))
+    },20)
+
   },
   page:0,
   songIdx:0,
@@ -54,6 +78,7 @@ const useAppStore = create<StoreSchema>()((set) => ({
   current:0,
   time:0,
   duration:0,
+  minimized:false,
   hidden:false,
   loop:false
   },
@@ -75,6 +100,7 @@ const useAppStore = create<StoreSchema>()((set) => ({
                 stopped:true,
                 playing:false,
                 loop:false,
+                minimized:false
 
               }
             }

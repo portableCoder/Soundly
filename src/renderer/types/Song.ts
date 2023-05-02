@@ -3,7 +3,8 @@ type Song = {
   background_img:string
   title:string,
   info:string,
-  lastPlayed:number
+  lastPlayed:number,
+  id:string
 }
 export  type  {
   Song

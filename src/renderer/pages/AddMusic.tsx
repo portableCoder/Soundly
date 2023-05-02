@@ -2,19 +2,23 @@ import getIdFromLink from '@/util/getIdFromLink'
 import isValidLink from '@/util/isValidLink'
 import 'react-toastify/dist/ReactToastify.css';
 import  getVideoDetails from '@/util/getVideoDetails'
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { IoMdAdd, IoMdCube, IoMdTrash } from 'react-icons/io'
 import { Song } from 'renderer/types/Song'
 import { ToastContainer, toast } from 'react-toastify'
-import useLocalStore from 'renderer/hooks/useLocalStore'
+import useLocalStore from 'renderer/hooks/LocalStore'
 import { Playlist } from 'renderer/types/Playlist'
-
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+import LocalStore from 'renderer/hooks/LocalStore';
 const AddMusic = () => {
   const [songs,setSongs] = useState<Song[]>([])
   const ref = useRef<HTMLInputElement>(null)
   const [link,setLink] = useState('')
   const [isLoading,setLoading] = useState(false)
-  const localStore = useLocalStore()
+  const localStore = useContext(LocalStore)
+  const [parent, enableAnimations] = useAutoAnimate({
+
+  })
 
   return (
     <div className='h-screen'>
@@ -27,8 +31,9 @@ const AddMusic = () => {
           setLoading(true)
           getVideoDetails(getIdFromLink(link) as string).then((data)=>{
           p.push({
+            id: crypto.randomUUID(),
             background_img:data.thumbnail_url,
-            lastPlayed:0,
+            lastPlayed:Number.MAX_SAFE_INTEGER,
             info:data.author_name,
             title:data.title,
 
@@ -60,7 +65,7 @@ const AddMusic = () => {
       {!isValidLink(link) && <div className='text-red-500 text-md'> Invalid link. Please enter a proper one. </div>}
 
 
-      <div className='my-6 flex flex-col gap-y-3 py-4 '>
+      <div ref={parent} className='my-6 flex flex-col gap-y-3 py-4 '>
         {          songs.length > 0  &&
 
         <div className='h-1/4 w-full relative bg-transparent'>
@@ -86,7 +91,7 @@ const AddMusic = () => {
                         {el.info}
                       </div>
               </div>
-              {<button className='btn btn-circle  border-none bg-transparent' onClick={()=>{
+              {<button className='btn btn-circle hover:border-none hover:bg-transparent  border-none bg-transparent' onClick={()=>{
                 const prev = [...songs].filter((el,j)=>j!==i)
                 setSongs(prev)
 
@@ -112,13 +117,15 @@ const AddMusic = () => {
 
           localStore.setSongs(deduplicatedSongs)
           toast.success('Playlist/Song(s) added')
-          if(ref.current?.value == ''){
+          if(songs.length === 1){
+            console.log('test')
             return
           }
 
           const newPlaylists : Playlist[] = [...prevPlaylists,{
 
 
+            id: crypto.randomUUID(),
             background_img:songs[0].background_img,
             lastPlayed:songs[0].lastPlayed,
             songs,

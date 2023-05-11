@@ -1,6 +1,8 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
+import getFileName from '@/util/getFileName';
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import path from 'path';
 
 export type Channels = 'ipc-example';
 
@@ -31,6 +33,18 @@ const electronHandler = {
     },
     // Other method you want to add like has(), reset(), etc.
   },
+  file:{
+    getFile(path:string):Buffer|null{
+      return ipcRenderer.sendSync('get-file',path)
+
+    },
+    selectFiles() : Promise<string[] | null>{
+      return ipcRenderer.invoke('open-files')
+    },
+    getFileName(filepath:string){
+     return ipcRenderer.sendSync('get-name',filepath)
+  }
+  }
 
 };
 

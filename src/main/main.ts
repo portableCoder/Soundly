@@ -9,11 +9,12 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { Blob} from 'buffer'
 
 class AppUpdater {
   constructor() {
@@ -71,8 +72,8 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    minWidth: 800,
+    minHeight: 600,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: app.isPackaged
@@ -136,8 +137,10 @@ app
   })
   .catch(console.log);
 import Store from 'electron-store';
+import { readFileSync } from 'fs';
 
 const store = new Store();
+
 
 // IPC listener
 ipcMain.on('electron-store-get', async (event, val) => {
@@ -146,3 +149,35 @@ ipcMain.on('electron-store-get', async (event, val) => {
 ipcMain.on('electron-store-set', async (event, key, val) => {
   store.set(key, val);
 });
+ipcMain.handle('open-files',async (event)=>{
+  const files = await dialog.showOpenDialog({
+    properties: ['openFile', 'multiSelections'],
+    filters:[
+      { name: 'audio files', extensions: ['mp3', 'wav', 'ogg','aac','FLAC'] },
+    ]
+  })
+  if (files.canceled){
+    event.returnValue = null
+    return null
+  }
+
+  return files.filePaths
+})
+ipcMain.on('get-name',async(e,filepath)=>{
+    const name = path.parse(filepath).name;
+    const base = path.parse(filepath).base;
+    const ext = path.parse(filepath).ext;
+    e.returnValue = {name,base,ext}
+
+})
+ipcMain.on('get-file',async (event,path)=>{
+try{
+    const file = readFileSync(path)
+    event.returnValue = file
+}
+catch(e){
+  event.returnValue = null
+  return
+}
+
+})

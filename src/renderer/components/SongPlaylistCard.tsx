@@ -43,9 +43,7 @@ const PlaylistCard = (
     backgroundColor: 'black',
   });
   return (
-    <div
-      className={`relative rounded-md w-full p-4 text-white pr-8 ${bg.current} `}
-    >
+    <div className={`relative rounded-md w-full p-4 pr-8 ${bg.current} `}>
       <div className="w-full relative flex items-end justify-end ">
         <button
           onClick={() => {
@@ -117,7 +115,7 @@ const PlaylistCard = (
               <div className="gap-x-2 text-sm text-gray-100 max-h-32 w-32 overflow-hidden">
                 <div className="flex flex-col gap-y-2">
                   {isPlay
-                    ? ref.current().join(', ') + ' and more..'
+                    ? ref.current().map((el) => <div>{el}</div>)
                     : playlistSong.info}
                 </div>
               </div>

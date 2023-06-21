@@ -5,6 +5,7 @@ type Song = {
   info:string,
   lastPlayed:number,
   id:string
+  genre:string[]
 }
 export  type  {
   Song

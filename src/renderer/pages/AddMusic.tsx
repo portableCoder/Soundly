@@ -65,7 +65,11 @@ const AddMusic = () => {
   const [storedSongs, storedPlaylists, setStoredSongs, setStoredPlaylists] =
     useLocalStore();
   const editing = storedPlaylists.find((el) => el.id === id);
-
+  useEffect(() => {
+    if (editing) {
+      setSongs(editing.songs);
+    }
+  }, []);
   return (
     <div className="h-screen">
       {editing && (
@@ -97,7 +101,7 @@ const AddMusic = () => {
                       lastPlayed: Number.MIN_SAFE_INTEGER,
                       info: data.author_name,
                       title: data.title,
-
+                      genre: [],
                       url: link,
                     });
                     setLoading(false);
@@ -141,6 +145,7 @@ const AddMusic = () => {
                 info: '',
                 title: getFileName(path).name,
                 lastPlayed: Number.MIN_SAFE_INTEGER,
+                genre: [],
               });
               setSongs(newSongs);
             }

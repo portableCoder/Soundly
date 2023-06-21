@@ -83,9 +83,11 @@ const Player = () => {
   useEffect(() => {
     const currentSong = { ...playlist.songs[songIdx] };
     const idx = localStoreSongs.findIndex((el) => el.id === currentSong.id);
+    console.log(currentSong.url, 'a');
     if (currentSong.background_img === '') {
       try {
         currentSong.url = getFileDataUrl(currentSong.url);
+        console.log(currentSong.url);
       } catch (e) {
         toast.error('File was not found, skipping..', { position: 'top-left' });
         nextSong();
@@ -108,7 +110,7 @@ const Player = () => {
   }
   return (
     <animated.div
-      className="fixed top-0 right-0 w-1/4 max-h-screen min-h-screen"
+      className="z-50 fixed top-0 right-0 w-1/3 max-h-screen min-h-screen text-white"
       style={spring}
     >
       <div className="absolute hidden top-0 left-0 " id="yt-test">
@@ -144,7 +146,7 @@ const Player = () => {
         ref={main}
         className="flex px-4 flex-col items-center w-full bg-zinc-900 backdrop-blur-2xl bg-opacity-70 h-full   absolute top-0 right-0 z-50 p-2 gap-x-3"
       >
-        <div className="absolute top-0 left-5 text-xl">
+        <div className="text-xl w-full flex my-2">
           <button
             onClick={() => {
               setMinimized(true);
@@ -156,8 +158,8 @@ const Player = () => {
         <div className="w-full h-full">
           <div className="w-full flex flex-col items-center justify-center gap-y-2">
             <SongImg {...song} />
-            <div>{song.title}</div>
-            <div>{song.info}</div>
+            <div className="text-xs text-center">{song.title}</div>
+            <div className="text-xs">{song.info}</div>
           </div>
 
           {isLoading && (
@@ -236,7 +238,7 @@ const Player = () => {
 
                 <Slider
                   current={current}
-                  max={duration}
+                  max={playing && duration === 0 ? current : duration}
                   onChange={(e) => {
                     setPlayerState({ ...playerState, time: e });
                   }}
@@ -250,13 +252,13 @@ const Player = () => {
           <div className="font-bold">
             <a>Songs</a>
           </div>
-          <ul className="h-56 flex-shrink-0 px-2 overflow-x-hidden gap-y-2 overflow-y-scroll divide-y-0 divide-gray-600">
+          <ul className="h-56 text-md flex-shrink-0 px-2 overflow-x-hidden gap-y-2 overflow-y-scroll divide-y-0 divide-gray-600">
             {playlist.songs.map((el, i) => (
               <li
                 onClick={() => {
                   setSong(i);
                 }}
-                className={`p-2 my-2 flex gap-x-2  cursor-pointer active:bg-indigo-500 duration-250 hover:bg-opacity-30 bg-opacity-0 transition-all ${
+                className={`p-2 text-xs my-2 flex gap-x-2  cursor-pointer active:bg-indigo-500 duration-250 hover:bg-opacity-30 bg-opacity-0 transition-all ${
                   songIdx === i ? 'bg-indigo-500 bg-opacity-100' : 'bg-white'
                 } `}
               >

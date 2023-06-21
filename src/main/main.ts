@@ -15,6 +15,7 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { Blob} from 'buffer'
+require('dotenv').config();
 
 class AppUpdater {
   constructor() {

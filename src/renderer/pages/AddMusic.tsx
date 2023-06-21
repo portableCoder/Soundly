@@ -210,11 +210,10 @@ const AddMusic = () => {
               className="h-full object-fill absolute z-0 top-0 left-0 w-full blur-2xl"
               src={songs[0].background_img}
             />
+
             <div className="flex flex-row gap-x-3 items-end">
-              <img
-                src={songs[0].background_img}
-                className="w-64 h-64 object-cover z-50"
-              />
+              <SongImg {...songs[0]} size="large" />
+
               {songs.length > 1 && (
                 <div className="text-4xl flex flex-col gap-y-3">
                   <input
@@ -259,8 +258,9 @@ const AddMusic = () => {
                             {...draggableProv.draggableProps}
                             {...draggableProv.dragHandleProps}
                             ref={draggableProv.innerRef}
+                            className="flex flex-col gap-y-3"
                           >
-                            <div className="w-full flex flex-row justify-between items-center gap-x-3">
+                            <div className="w-full flex flex-row justify-between rounded-md p-2 items-center my-4 gap-x-3 hover:bg-gradient-to-br from-violet-500 to-indigo-500">
                               <SongImg {...el} />
                               <div className=" flex my-4 flex-col w-full">
                                 <div>{el.title}</div>

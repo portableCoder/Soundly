@@ -18,7 +18,7 @@ const Icons = [<IoMdHome />, <IoMdAdd />, <IoMdBook />, <IoMdCog />];
 const Texts = ['Home', 'Add Music', 'Song Library', 'Settings'];
 const Menu = ({ onSelect }: MenuProps) => {
   return (
-    <div className="flex flex-col items-center py-8   gap-y-5 w-16 border-r border-gray-800 h-full bg-zinc-900">
+    <div className="flex flex-col items-center py-8 dark:text-white  gap-y-5 w-16 border-r border-gray-800 h-full bg-white text-black dark:bg-zinc-900">
       {Icons.map((el, i) => (
         <div key={i}>
           <MenuButton

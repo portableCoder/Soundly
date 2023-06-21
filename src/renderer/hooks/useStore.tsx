@@ -14,6 +14,10 @@ const useAppStore = create<StoreSchema>()(
   persist(
     (set) => ({
       tab: 2,
+      theme: 'auto',
+      setTheme: (theme) => {
+        set({ theme });
+      },
       tabs: [<Home />, <AddMusic />, <SongLibrary />, <Settings />],
       setTab: (tab) => {
         set((prev) => ({ tab }));
@@ -139,6 +143,7 @@ const useAppStore = create<StoreSchema>()(
         playerState,
         tab,
         playlist,
+        theme,
       }) => ({
         addMusic,
         page,
@@ -146,6 +151,7 @@ const useAppStore = create<StoreSchema>()(
         playerState,
         tab,
         playlist,
+        theme,
       }),
 
       name: 'player-state',

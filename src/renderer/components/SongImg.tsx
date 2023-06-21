@@ -22,7 +22,7 @@ const SongImg = (
   }
   return (
     <div
-      className={`${dim} relative shrink-0 my-2 rounded-md stack my-auto bg-zinc-900 bg-opacity-50`}
+      className={`${dim} relative shrink-0 my-2 rounded-md stack  bg-zinc-900 bg-opacity-50`}
     >
       {isPlay ? (
         playlistSong.songs.slice(0, 4).map((el) => {

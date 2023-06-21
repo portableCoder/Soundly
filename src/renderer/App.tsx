@@ -11,7 +11,10 @@ import { Playlist } from './types/Playlist';
 import LocalStore from './hooks/LocalStore';
 
 import { HiBars3BottomRight } from 'react-icons/hi2';
+import { BsMusicNoteBeamed } from 'react-icons/bs';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
+const qc = new QueryClient();
 export default function App() {
   const [par, _] = useAutoAnimate({});
   const store = window.electron.store;
@@ -40,48 +43,56 @@ export default function App() {
     setPlaylists(getPlaylists());
     setSongs(getSongs());
   }, []);
-
+  const theme = useAppStore((el) => el.theme);
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.body.setAttribute('data-theme', 'dark');
+    } else {
+      document.body.setAttribute('data-theme', 'light');
+    }
+  }, [theme]);
   const stopped = useAppStore((prev) => prev.playerState.stopped);
   const minimized = useAppStore((el) => el.playerState.minimized);
   const setMinimized = useAppStore((el) => el.setMinimized);
-
   return (
-    <LocalStore.Provider
-      value={{
-        getPlaylists,
-        getSongs,
-        setPlaylists,
-        setSongs,
-        songs,
-        playlists,
-      }}
-    >
-      <div className="bg-zinc-950 w-screen h-screen text-white flex overflow-x-hidden">
-        <Menu
-          onSelect={(sel) => {
-            setTab(sel);
-          }}
-        />
+    <QueryClientProvider client={qc}>
+      <LocalStore.Provider
+        value={{
+          getPlaylists,
+          getSongs,
+          setPlaylists,
+          setSongs,
+          songs,
+          playlists,
+        }}
+      >
+        <div className="bg-white text-black dark:bg-zinc-950 w-screen h-screen dark:text-white flex overflow-x-hidden">
+          <Menu
+            onSelect={(sel) => {
+              setTab(sel);
+            }}
+          />
 
-        <div
-          ref={par}
-          className="relative w-full  h-full py-16 overflow-y-auto p-4"
-        >
-          {tabs[tab]}
-        </div>
+          <div
+            ref={par}
+            className="relative w-full  h-full py-16 overflow-y-auto p-4"
+          >
+            {tabs[tab]}
+          </div>
 
-        {!stopped && <Player />}
-        <div className="fixed top-5 right-10">
-          {minimized && (
-            <button
-              onClick={() => setMinimized(false)}
-              className="btn btn-circle text-white text-2xl"
-            >
-              <HiBars3BottomRight />
-            </button>
-          )}
+          {!stopped && <Player />}
+          <div className="fixed top-5 right-10">
+            {minimized && (
+              <button
+                onClick={() => setMinimized(false)}
+                className="btn animate-pulse btn-circle text-white text-2xl"
+              >
+                <BsMusicNoteBeamed />
+              </button>
+            )}
+          </div>
         </div>
-      </div>
-    </LocalStore.Provider>
+      </LocalStore.Provider>
+    </QueryClientProvider>
   );
 }

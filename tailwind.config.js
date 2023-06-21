@@ -1,7 +1,6 @@
 
 module.exports = {
   content: ['./src/renderer/**/*.{js,jsx,ts,tsx,ejs}'],
-  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
 
@@ -11,5 +10,10 @@ module.exports = {
     extend: {},
   },
   plugins: [require("daisyui")],
+  daisyui: {
+    themes: ['light', 'dark'],
 
-};
+  },
+  darkMode: ['class','[data-theme="dark"]']
+}
+

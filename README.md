@@ -13,6 +13,6 @@ Features/Improvements to be done:
 - [x] Adding/playing music from youtube/file system
 - [x] Creating playlists
 - [x] Persistent state across sessions
-- [] Adding/playing music from soundcloud/spotify/other sources
-- [] Adding more options in settings
-- [] Overhauling design
+- [ ] Adding/playing music from soundcloud/spotify/other sources
+- [ ] Adding more options in settings
+- [ ] Overhauling design
